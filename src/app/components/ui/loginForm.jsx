@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom"
 
 const LoginForm = () => {
   const history = useHistory()
+  // console.log("history", history.location.state.from.pathname)
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -68,7 +69,9 @@ const LoginForm = () => {
 
     try {
       await signIn({ email, password })
-      history.push("/")
+      history.push(
+        history.location.state ? history.location.state.from.pathname : "/"
+      )
     } catch (error) {
       setErrors(error)
     }

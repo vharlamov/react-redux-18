@@ -13,6 +13,7 @@ const EditUserPage = () => {
   const history = useHistory()
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState({
+    name: "",
     email: "",
     password: "",
     profession: "",
@@ -45,6 +46,7 @@ const EditUserPage = () => {
     const isValid = validate()
     if (!isValid) return
     const { profession, qualities } = data
+    console.log(profession) // to kill
     api.users
       .update(userId, {
         ...data,
@@ -161,7 +163,7 @@ const EditUserPage = () => {
               </button>
             </form>
           ) : (
-            "Loading..."
+            "Edit Loading..."
           )}
         </div>
       </div>
