@@ -5,7 +5,8 @@ import userService from "../services/user.service"
 import { toast } from "react-toastify"
 import localStorageService, {
   setTokens,
-  getUserId
+  getUserId,
+  getAccessToken
 } from "../services/localStorage.service"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 
@@ -17,16 +18,15 @@ export const httpAuth = axios.create({
     key: process.env.REACT_APP_FIREBASE_KEY
   }
 })
+
 const AuthContext = React.createContext()
 
 export const useAuth = () => {
   return useContext(AuthContext)
 }
 
-// const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`
-
 const getUrl = (action) => {
-  return `${baseURL}accounts:${action}?key=${process.env.REACT_APP_FIREBASE_KEY}`
+  return `${baseURL}accounts:${action}`
 }
 
 const AuthProvider = ({ children }) => {
@@ -119,6 +119,40 @@ const AuthProvider = ({ children }) => {
     }
   }
 
+  async function updateUser({ _id, email, password, ...rest }) {
+    try {
+      const { data } = await httpAuth.post(getUrl("update"), {
+        idToken: getAccessToken(),
+        email,
+        password,
+        returnSecureToken: true
+      })
+
+      if (data.idToken && data.refreshToken) {
+        setTokens(data)
+      }
+
+      const userData = { _id, email, ...rest }
+
+      await updateCurrentUser(userData)
+    } catch (error) {
+      errorCatcher(error)
+      const { code, message } = error.response.data.error
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function updateCurrentUser(data) {
+    try {
+      const { content } = await userService.updateUser(data)
+      console.log(content)
+      setCurrentUser(content)
+    } catch (error) {
+      errorCatcher(error)
+    }
+  }
+
   function errorCatcher(error) {
     const { message } = error.response.data
     setError(message)
@@ -151,7 +185,9 @@ const AuthProvider = ({ children }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ signUp, signIn, logOut, currentUser }}>
+    <AuthContext.Provider
+      value={{ signUp, signIn, logOut, updateUser, currentUser }}
+    >
       {!isLoading ? children : "Loading..."}
     </AuthContext.Provider>
   )

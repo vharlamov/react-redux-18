@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { useHistory } from "react-router"
 import { useAuth } from "../../hooks/useAuth"
+import { useProfessions } from "../../hooks/useProfession"
 
 const UserCard = ({ user }) => {
   const history = useHistory()
@@ -9,6 +10,11 @@ const UserCard = ({ user }) => {
   const handleClick = () => {
     history.push(history.location.pathname + "/edit")
   }
+
+  const getProfession = (id) => {
+    return useProfessions().getProfession(id)
+  }
+
   return (
     <div className="card mb-3">
       <div className="card-body">
@@ -24,7 +30,9 @@ const UserCard = ({ user }) => {
           <img src={user.image} className="rounded-circle" width="150" />
           <div className="mt-3">
             <h4>{user.name}</h4>
-            <p className="text-secondary mb-1">{user.profession.name}</p>
+            <p className="text-secondary mb-1">
+              {getProfession(user.profession).name}
+            </p>
             <div className="text-muted">
               <i
                 className="bi bi-caret-down-fill text-primary"

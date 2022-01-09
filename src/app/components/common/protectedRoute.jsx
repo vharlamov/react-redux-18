@@ -1,10 +1,17 @@
 import React from "react"
 import { useAuth } from "../../hooks/useAuth"
-import { Route, Redirect } from "react-router-dom"
+import { Route, Redirect, useParams } from "react-router-dom"
 import PropTypes from "prop-types"
 
-const ProtectedRoute = ({ component: Component, children, ...rest }) => {
+const ProtectedRoute = ({
+  component: Component,
+  children,
+  computedMatch,
+  ...rest
+}) => {
   const { currentUser } = useAuth()
+  const { userId, edit } = computedMatch.params
+
   return (
     <Route
       {...rest}
@@ -21,6 +28,11 @@ const ProtectedRoute = ({ component: Component, children, ...rest }) => {
             />
           )
         }
+
+        if (edit && currentUser._id !== userId) {
+          return <Redirect to="/" />
+        }
+
         return Component ? <Component {...props} /> : children
       }}
     />
@@ -33,7 +45,8 @@ ProtectedRoute.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
-  location: PropTypes.object
+  location: PropTypes.object,
+  computedMatch: PropTypes.object
 }
 
 export default ProtectedRoute
