@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import { useHistory } from "react-router"
 import { useAuth } from "../../hooks/useAuth"
 import { useProfessions } from "../../hooks/useProfession"
+import defAva from "../../assets/defAva.png"
 
 const UserCard = ({ user }) => {
   const history = useHistory()
@@ -27,7 +28,11 @@ const UserCard = ({ user }) => {
           </button>
         ) : null}
         <div className="d-flex flex-column align-items-center text-center position-relative">
-          <img src={user.image} className="rounded-circle" width="150" />
+          <img
+            src={user.image ? user.image : defAva}
+            className="rounded-circle"
+            width="150"
+          />
           <div className="mt-3">
             <h4>{user.name}</h4>
             <p className="text-secondary mb-1">
