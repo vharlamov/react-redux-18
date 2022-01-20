@@ -7,15 +7,19 @@ import SearchStatus from "../../ui/searchStatus"
 import UserTable from "../../ui/usersTable"
 import _ from "lodash"
 import { useUser } from "../../../hooks/useUsers"
-import { useProfessions } from "../../../hooks/useProfession"
 import { useAuth } from "../../../hooks/useAuth"
+import { useSelector } from "react-redux"
+import {
+  getProfessions,
+  getProfessionsLoading
+} from "../../../store/professions"
 
 const UsersListPage = () => {
   const { users } = useUser()
   const { currentUser } = useAuth()
-  const { professions, isLoading: professionsLoading } = useProfessions()
+  const professions = useSelector(getProfessions())
+  const professionsLoading = useSelector(getProfessionsLoading())
   const [currentPage, setCurrentPage] = useState(1)
-  // const [professions, setProfession] = useState()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedProf, setSelectedProf] = useState()
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" })

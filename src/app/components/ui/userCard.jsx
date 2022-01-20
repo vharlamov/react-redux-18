@@ -2,8 +2,9 @@ import React from "react"
 import PropTypes from "prop-types"
 import { useHistory } from "react-router"
 import { useAuth } from "../../hooks/useAuth"
-import { useProfessions } from "../../hooks/useProfession"
 import defAva from "../../assets/defAva.png"
+import { useSelector } from "react-redux"
+import { getProfessionById } from "../../store/professions"
 
 const UserCard = ({ user }) => {
   const history = useHistory()
@@ -13,7 +14,7 @@ const UserCard = ({ user }) => {
   }
 
   const getProfession = (id) => {
-    return useProfessions().getProfession(id)
+    return useSelector(getProfessionById(id))
   }
 
   return (

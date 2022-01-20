@@ -112,7 +112,6 @@ const AuthProvider = ({ children }) => {
   async function createUser(data) {
     try {
       const { content } = await userService.create(data)
-      console.log(content)
       setCurrentUser(content)
     } catch (error) {
       errorCatcher(error)

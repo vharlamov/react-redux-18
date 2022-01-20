@@ -13,14 +13,14 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    semi: [0, "always"],
+    semi: "off",
+    "no-unused-vars": "off",
     indent: [0, 4],
     "space-before-function-paren": [
       "error",
       { anonymous: "always", named: "never" }
     ],
     "multiline-ternary": ["off"],
-    "no-unused-vars": "off",
     quotes: [
       "error",
       "double",

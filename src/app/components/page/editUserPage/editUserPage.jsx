@@ -7,9 +7,10 @@ import SelectField from "../../common/form/selectField"
 import RadioField from "../../common/form/radio.Field"
 import MultiSelectField from "../../common/form/multiSelectField"
 import BackHistoryButton from "../../common/backButton"
-import { useProfessions } from "../../../hooks/useProfession"
-import { useQualities } from "../../../hooks/useQualities"
 import { useAuth } from "../../../hooks/useAuth"
+import { useSelector } from "react-redux"
+import { getQualities, getQualitiesLoading } from "../../../store/qualities"
+import { getProfessions } from "../../../store/professions"
 
 const EditUserPage = () => {
   const user = useAuth().currentUser
@@ -17,13 +18,14 @@ const EditUserPage = () => {
   const history = useHistory()
   const [data, setData] = useState(user)
 
-  const { professions } = useProfessions()
+  const professions = useSelector(getProfessions())
   const professionsList = professions.map((item) => ({
     label: item.name,
     value: item._id
   }))
 
-  const { qualities, isLoading } = useQualities()
+  const qualities = useSelector(getQualities())
+  const qualitiesLoading = useSelector(getQualitiesLoading())
   const qualitiesList = qualities.map((item) => ({
     label: item.name,
     value: item._id
@@ -37,13 +39,13 @@ const EditUserPage = () => {
   }
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!qualitiesLoading) {
       setData((prev) => ({
         ...prev,
         qualities: transformData(user.qualities)
       }))
     }
-  }, [isLoading])
+  }, [qualitiesLoading])
 
   const [errors, setErrors] = useState({})
 
@@ -113,7 +115,7 @@ const EditUserPage = () => {
       <BackHistoryButton />
       <div className="row">
         <div className="col-md-6 offset-md-3 shadow p-4">
-          {!isLoading &&
+          {!qualitiesLoading &&
           Object.keys(professions).length > 0 &&
           data.qualities[0].value ? (
             <form onSubmit={handleSubmit}>

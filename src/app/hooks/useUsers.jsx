@@ -39,6 +39,7 @@ const UserProvider = ({ children }) => {
   }, [error])
 
   function errorCatcher(error) {
+    console.log(error.response)
     const { message } = error.response.data
 
     setError(message)
