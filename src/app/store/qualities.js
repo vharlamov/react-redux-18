@@ -53,6 +53,7 @@ export const loadQualitiesList = () => async (dispatch, getState) => {
 export const getQualities = () => (state) => state.qualities.entities
 export const getQualitiesLoading = () => (state) => state.qualities.isLoading
 export const getQualitiesByIds = (ids) => (state) => {
+  console.log("ids", ids)
   if (state.qualities.entities) {
     const qualitiesArray = []
     const quals = state.qualities.entities

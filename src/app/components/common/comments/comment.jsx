@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { displayDate } from "../../../utils/displayDate"
-import { useComments } from "../../../hooks/useComments"
-import { useUser } from "../../../hooks/useUsers"
-import { getUserId } from "../../../services/localStorage.service"
 import { useAuth } from "../../../hooks/useAuth"
+import { useSelector } from "react-redux"
+import { getUserById } from "../../../store/users"
 
 const Comment = ({
   content,
@@ -13,8 +12,7 @@ const Comment = ({
   userId,
   onRemove
 }) => {
-  const { getUser } = useUser()
-  const user = getUser(userId)
+  const user = useSelector(getUserById(userId))
   const { currentUser } = useAuth()
 
   return (

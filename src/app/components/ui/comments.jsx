@@ -1,6 +1,5 @@
 import { orderBy } from "lodash"
 import React, { useEffect, useState } from "react"
-import api from "../../api"
 import CommentsList, { AddCommentForm } from "../common/comments"
 import { CommentsProvider, useComments } from "../../hooks/useComments"
 

@@ -10,14 +10,16 @@ import { ToastContainer } from "react-toastify"
 import AuthProvider from "./hooks/useAuth"
 import UserProvider from "./hooks/useUsers"
 import ProtectedRoute from "./components/common/protectedRoute"
-import { useDispatch } from "react-redux"
+import { useDispatch, useStore } from "react-redux"
 import { loadQualitiesList } from "./store/qualities"
 import { loadProfList } from "./store/professions"
+import { loadUsersList } from "./store/users"
 
 function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(loadUsersList())
     dispatch(loadQualitiesList())
     dispatch(loadProfList())
   }, [])
@@ -26,15 +28,13 @@ function App() {
     <div>
       <AuthProvider>
         <NavBar />
-        <UserProvider>
-          <Switch>
-            <ProtectedRoute path="/users/:userId?/:edit?" component={Users} />
-            <Route path="/logout" component={LogOut} />
-            <Route path="/login/:type?" component={Login} />
-            <Route path="/" exact component={Main} />
-            <Redirect to="/" />
-          </Switch>
-        </UserProvider>
+        <Switch>
+          <ProtectedRoute path="/users/:userId?/:edit?" component={Users} />
+          <Route path="/logout" component={LogOut} />
+          <Route path="/login/:type?" component={Login} />
+          <Route path="/" exact component={Main} />
+          <Redirect to="/" />
+        </Switch>
       </AuthProvider>
       <ToastContainer />
     </div>

@@ -6,16 +6,17 @@ import GroupList from "../../common/groupList"
 import SearchStatus from "../../ui/searchStatus"
 import UserTable from "../../ui/usersTable"
 import _ from "lodash"
-import { useUser } from "../../../hooks/useUsers"
 import { useAuth } from "../../../hooks/useAuth"
 import { useSelector } from "react-redux"
 import {
   getProfessions,
   getProfessionsLoading
 } from "../../../store/professions"
+import { getUsers } from "../../../store/users"
 
 const UsersListPage = () => {
-  const { users } = useUser()
+  const users = useSelector(getUsers())
+  console.log("users loading", users)
   const { currentUser } = useAuth()
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoading())
@@ -72,10 +73,10 @@ const UsersListPage = () => {
             JSON.stringify(user.profession) === JSON.stringify(selectedProf)
         )
       : data
-
+    console.log("filteredUsers", filteredUsers, "searchQuery", searchQuery)
     return filteredUsers.filter((u) => u._id !== currentUser._id)
   }
-
+  console.log(filterUsers(users))
   const filteredUsers = filterUsers(users)
 
   const count = filteredUsers.length
