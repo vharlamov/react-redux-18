@@ -6,18 +6,16 @@ import GroupList from "../../common/groupList"
 import SearchStatus from "../../ui/searchStatus"
 import UserTable from "../../ui/usersTable"
 import _ from "lodash"
-import { useAuth } from "../../../hooks/useAuth"
 import { useSelector } from "react-redux"
 import {
   getProfessions,
   getProfessionsLoading
 } from "../../../store/professions"
-import { getUsers } from "../../../store/users"
+import { getAuthUser, getUsers } from "../../../store/users"
 
 const UsersListPage = () => {
   const users = useSelector(getUsers())
-  console.log("users loading", users)
-  const { currentUser } = useAuth()
+  const currentUserId = useSelector(getAuthUser())
   const professions = useSelector(getProfessions())
   const professionsLoading = useSelector(getProfessionsLoading())
   const [currentPage, setCurrentPage] = useState(1)
@@ -27,7 +25,6 @@ const UsersListPage = () => {
   const pageSize = 8
 
   const handleDelete = (userId) => {
-    console.log("delete user")
     // setUsers(users.filter((user) => user._id !== userId));
   }
   const handleToggleBookMark = (id) => {
@@ -38,7 +35,6 @@ const UsersListPage = () => {
       return user
     })
     // setUsers(newArray);
-    console.log(newArray)
   }
 
   useEffect(() => {
@@ -73,10 +69,8 @@ const UsersListPage = () => {
             JSON.stringify(user.profession) === JSON.stringify(selectedProf)
         )
       : data
-    console.log("filteredUsers", filteredUsers, "searchQuery", searchQuery)
-    return filteredUsers.filter((u) => u._id !== currentUser._id)
+    return filteredUsers.filter((u) => u._id !== currentUserId)
   }
-  console.log(filterUsers(users))
   const filteredUsers = filterUsers(users)
 
   const count = filteredUsers.length

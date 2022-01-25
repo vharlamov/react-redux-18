@@ -1,9 +1,10 @@
 import httpService from "./http.service"
 import axios from "axios"
+import localStorageService from "./localStorage.service"
 
 const baseURL = "https://identitytoolkit.googleapis.com/v1/"
 
-const httpAuth = axios.create({
+export const httpAuth = axios.create({
   baseURL,
   params: {
     key: process.env.REACT_APP_FIREBASE_KEY
@@ -43,6 +44,13 @@ const authService = {
   },
   remove: async (id) => {
     const { data } = await httpService.remove(authEndpoint + id)
+    return data
+  },
+  refresh: async () => {
+    const { data } = await httpAuth.post("token", {
+      grant_type: "refresh_token",
+      refresh_token: localStorageService.getRefreshToken()
+    })
     return data
   }
 }

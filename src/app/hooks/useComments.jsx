@@ -3,8 +3,9 @@ import PropTypes from "prop-types"
 import { toast } from "react-toastify"
 import { nanoid } from "nanoid"
 import { useParams } from "react-router-dom"
-import { useAuth } from "./useAuth"
 import commentService from "../services/comment.service"
+import { useSelector } from "react-redux"
+import { getCurrentUser } from "../store/users"
 
 const CommentsContext = React.createContext()
 
@@ -17,7 +18,7 @@ export const CommentsProvider = ({ children }) => {
   const [comments, setComments] = useState([])
   const [error, setError] = useState(null)
   const { userId } = useParams()
-  const { currentUser } = useAuth()
+  const currentUser = useSelector(getCurrentUser())
 
   function errorCatcher(error) {
     const { message } = error.response.data
@@ -50,7 +51,6 @@ export const CommentsProvider = ({ children }) => {
     } catch (error) {
       errorCatcher(error)
     }
-    // console.log(comment)
   }
 
   async function removeComment(id) {

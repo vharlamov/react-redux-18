@@ -55,6 +55,7 @@ export const getProfessionById = (id) => (state) => {
     const profs = state.professions.entities
     return profs.find((prof) => prof._id === id)
   }
+  return []
 }
 
 export default profReduser

@@ -10,12 +10,13 @@ import { useAuth } from "../../../hooks/useAuth"
 import { useSelector } from "react-redux"
 import { getQualities, getQualitiesLoading } from "../../../store/qualities"
 import { getProfessions } from "../../../store/professions"
+import { getAuthUser, getCurrentUser } from "../../../store/users"
 
 const EditUserPage = () => {
-  const user = useAuth().currentUser
+  const currentUser = useSelector(getCurrentUser())
   const { updateUser } = useAuth()
   const history = useHistory()
-  const [data, setData] = useState(user)
+  const [data, setData] = useState(currentUser)
 
   const professions = useSelector(getProfessions())
   const professionsList = professions.map((item) => ({
@@ -41,7 +42,7 @@ const EditUserPage = () => {
     if (!qualitiesLoading) {
       setData((prev) => ({
         ...prev,
-        qualities: transformData(user.qualities)
+        qualities: transformData(currentUser.qualities)
       }))
     }
   }, [qualitiesLoading])

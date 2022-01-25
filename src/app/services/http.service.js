@@ -1,14 +1,13 @@
 import axios from "axios"
 import { toast } from "react-toastify"
 import configFile from "../config.json"
-import { httpAuth } from "../hooks/useAuth"
+import authService from "./auth.service"
 import localStorageService, { setTokens } from "./localStorage.service"
 
 const http = axios.create({ baseURL: configFile.apiEndpoint })
 
 http.interceptors.request.use(
   async function (config) {
-    // console.log("httpservice", config)
     if (configFile.isFirebase) {
       const containSlash = /\/$/gi.test(config.url)
       config.url =
@@ -18,10 +17,7 @@ http.interceptors.request.use(
       const refreshToken = localStorageService.getRefreshToken()
 
       if (refreshToken && expiresDate < Date.now()) {
-        const { data } = await httpAuth.post("token", {
-          grant_type: "refresh_token",
-          refresh_token: refreshToken
-        })
+        const data = await authService.refresh()
 
         setTokens({
           idToken: data.id_token,
@@ -65,7 +61,6 @@ http.interceptors.response.use(
       error.response.status < 500
 
     if (!expectedErrors) {
-      console.log(error)
       toast.error("Somthing was wrong. Try it later")
     }
     return Promise.reject(error)

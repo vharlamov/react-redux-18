@@ -1,7 +1,8 @@
 import React from "react"
-import { useAuth } from "../../hooks/useAuth"
-import { Route, Redirect, useParams } from "react-router-dom"
+import { Route, Redirect } from "react-router-dom"
 import PropTypes from "prop-types"
+import { useSelector } from "react-redux"
+import { getAuthUser, getLogged } from "../../store/users"
 
 const ProtectedRoute = ({
   component: Component,
@@ -9,14 +10,16 @@ const ProtectedRoute = ({
   computedMatch,
   ...rest
 }) => {
-  const { currentUser } = useAuth()
+  const isLogged = useSelector(getLogged())
+  const currentUserId = useSelector(getAuthUser())
   const { userId, edit } = computedMatch.params
+  if (!currentUserId) return "Loading..."
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (!currentUser) {
+        if (!isLogged) {
           return (
             <Redirect
               to={{
@@ -29,7 +32,7 @@ const ProtectedRoute = ({
           )
         }
 
-        if (edit && currentUser._id !== userId) {
+        if (edit && currentUserId !== userId) {
           return <Redirect to="/" />
         }
 

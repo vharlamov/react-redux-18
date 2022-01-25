@@ -27,6 +27,7 @@ const UserProvider = ({ children }) => {
       errorCatcher(error)
     }
   }
+
   const getUser = (id) => {
     return users.find((user) => user._id === id)
   }
@@ -39,7 +40,6 @@ const UserProvider = ({ children }) => {
   }, [error])
 
   function errorCatcher(error) {
-    console.log(error.response)
     const { message } = error.response.data
 
     setError(message)

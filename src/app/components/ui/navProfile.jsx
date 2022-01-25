@@ -1,14 +1,19 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { useAuth } from "../../hooks/useAuth"
 import defAva from "../../assets/defAva.png"
+import { useSelector } from "react-redux"
+import { getAuthUser, getCurrentUser } from "../../store/users"
 
 const NavProfile = () => {
-  const { currentUser } = useAuth()
+  const currentUserId = useSelector(getAuthUser())
+  const currentUser = useSelector(getCurrentUser())
   const [isOpen, setOpen] = useState(false)
+
   const toggleMenu = () => {
     setOpen(!isOpen)
   }
+
+  if (!currentUser) return "Loading..."
 
   return (
     <div className="dropdown" onClick={toggleMenu}>
@@ -22,7 +27,7 @@ const NavProfile = () => {
         />
       </div>
       <div className={"w-100 dropdown-menu" + (isOpen ? " show" : "")}>
-        <Link to={`/users/${currentUser._id}`} className="dropdown-item">
+        <Link to={`/users/${currentUserId}`} className="dropdown-item">
           Profile
         </Link>
         <Link to="/logout" className="dropdown-item">
