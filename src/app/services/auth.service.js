@@ -11,11 +11,9 @@ export const httpAuth = axios.create({
   }
 })
 
-const getUrl = (action) => {
+const getUrl = (action, id = "") => {
   return `${baseURL}accounts:${action}`
 }
-
-const authEndpoint = ""
 
 const authService = {
   register: async ({ email, password }) => {
@@ -34,16 +32,13 @@ const authService = {
     })
     return data
   },
-  get: async () => {
-    const { data } = await httpService.get(authEndpoint)
-    return data
-  },
-  create: async (payload) => {
-    const { data } = await httpService.post(authEndpoint, payload)
-    return data
-  },
-  remove: async (id) => {
-    const { data } = await httpService.remove(authEndpoint + id)
+  update: async ({ _id, email, password }) => {
+    const { data } = await httpAuth.post(getUrl("update"), {
+      idToken: localStorageService.getAccessToken(),
+      email,
+      password,
+      returnSecureToken: true
+    })
     return data
   },
   refresh: async () => {

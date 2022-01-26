@@ -7,16 +7,19 @@ import RadioField from "../../common/form/radio.Field"
 import MultiSelectField from "../../common/form/multiSelectField"
 import BackHistoryButton from "../../common/backButton"
 import { useAuth } from "../../../hooks/useAuth"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { getQualities, getQualitiesLoading } from "../../../store/qualities"
 import { getProfessions } from "../../../store/professions"
-import { getAuthUser, getCurrentUser } from "../../../store/users"
+import usersReducer, { getCurrentUser, updateUser } from "../../../store/users"
+import userService from "../../../services/user.service"
+import authService from "../../../services/auth.service"
 
 const EditUserPage = () => {
   const currentUser = useSelector(getCurrentUser())
-  const { updateUser } = useAuth()
+  const { update } = authService
   const history = useHistory()
   const [data, setData] = useState(currentUser)
+  const dispatch = useDispatch()
 
   const professions = useSelector(getProfessions())
   const professionsList = professions.map((item) => ({
@@ -61,8 +64,9 @@ const EditUserPage = () => {
     }
 
     try {
-      await updateUser(newData)
-      history.push("/")
+      update(newData)
+      dispatch(updateUser(newData))
+      history.push(`/users/${currentUser._id}`)
     } catch (error) {
       setErrors(error)
     }

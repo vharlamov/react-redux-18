@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { Route, Switch, Redirect, useHistory } from "react-router-dom"
+import React from "react"
+import { Route, Switch, Redirect } from "react-router-dom"
 
 import Users from "./layouts/users"
 import Login from "./layouts/login"
@@ -12,10 +12,6 @@ import ProtectedRoute from "./components/common/protectedRoute"
 import AppLoader from "./components/hoc/appLoader"
 
 function App() {
-  const history = useHistory()
-  useEffect(() => {
-    console.log("history", history.location.pathname)
-  }, [history])
   return (
     <div>
       <AppLoader>

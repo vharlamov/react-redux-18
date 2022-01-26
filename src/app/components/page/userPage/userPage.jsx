@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import UserCard from "../../ui/userCard"
 import QualitiesCard from "../../ui/qualitiesCard"
