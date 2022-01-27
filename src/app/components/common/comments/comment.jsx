@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import { displayDate } from "../../../utils/displayDate"
 import { useSelector } from "react-redux"
-import { getAuthUser, getCurrentUser, getUserById } from "../../../store/users"
+import { getAuthUser, getUserById } from "../../../store/users"
 
 const Comment = ({
   content,
@@ -12,7 +12,7 @@ const Comment = ({
   onRemove
 }) => {
   const currentUserId = useSelector(getAuthUser())
-  const currentUser = useSelector(getCurrentUser())
+  const commentUser = useSelector(getUserById(userId))
 
   return (
     <div className="bg-light card-body  mb-3">
@@ -20,7 +20,7 @@ const Comment = ({
         <div className="col">
           <div className="d-flex flex-start ">
             <img
-              src={currentUser.image}
+              src={commentUser.image}
               className="rounded-circle shadow-1-strong me-3"
               alt="avatar"
               width="65"
@@ -30,7 +30,7 @@ const Comment = ({
               <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-1 ">
-                    {currentUser && currentUser.name}{" "}
+                    {commentUser && commentUser.name}{" "}
                     <span className="small">- {displayDate(created)}</span>
                   </p>
                   {currentUserId === userId && (

@@ -5,7 +5,6 @@ import { getLogged } from "../../store/users"
 import NavProfile from "./navProfile"
 
 const NavBar = () => {
-  // const currentUser = useSelector(getCurrentUser())
   const isLogged = useSelector(getLogged())
 
   return (

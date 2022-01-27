@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import TextAreaField from "../form/textAreaField"
 import { validator } from "../../../utils/validator"
 import PropTypes from "prop-types"
-// const initialData = { userId: "", content: "" }
 
 const AddCommentForm = ({ onSubmit }) => {
   const [data, setData] = useState({})
@@ -14,11 +13,6 @@ const AddCommentForm = ({ onSubmit }) => {
     }))
   }
   const validatorConfog = {
-    // userId: {
-    //   isRequired: {
-    //     message: "Выберите от чьего имени вы хотите отправить сообщение"
-    //   }
-    // },
     content: {
       isRequired: {
         message: "Сообщение не может быть пустым"
@@ -45,13 +39,6 @@ const AddCommentForm = ({ onSubmit }) => {
     onSubmit(data)
     clearForm()
   }
-
-  // const arrayOfUsers =
-  //   users &&
-  //   Object.keys(users).map((userId) => ({
-  //     name: users[userId].name,
-  //     value: users[userId]._id
-  //   }))
 
   return (
     <div>

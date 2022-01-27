@@ -3,8 +3,6 @@ import Qualities from "./qualities"
 import PropTypes from "prop-types"
 
 const QualitiesCard = ({ data }) => {
-  // const qualIds = data.map((qual) => qual._id)
-
   return (
     <div className="card mb-3">
       <div className="card-body d-flex flex-column justify-content-center text-center">
