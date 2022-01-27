@@ -24,13 +24,17 @@ const UserTable = ({
       name: "Качества",
       component: (user) => <Qualities qualities={user.qualities} />
     },
+    sex: {
+      name: "Пол",
+      path: "sex"
+    },
     professions: {
       name: "Профессия",
       component: (user) => <Profession id={user.profession} />
     },
     completedMeetings: {
       path: "completedMeetings",
-      name: "Встретился, раз"
+      name: "Встречи"
     },
     rate: { path: "rate", name: "Оценка" },
     bookmark: {

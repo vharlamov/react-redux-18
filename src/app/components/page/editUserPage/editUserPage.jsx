@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react"
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { validator } from "../../../utils/validator"
 import TextField from "../../common/form/textField"
 import SelectField from "../../common/form/selectField"
 import RadioField from "../../common/form/radio.Field"
 import MultiSelectField from "../../common/form/multiSelectField"
 import BackHistoryButton from "../../common/backButton"
-import { useAuth } from "../../../hooks/useAuth"
 import { useSelector, useDispatch } from "react-redux"
 import { getQualities, getQualitiesLoading } from "../../../store/qualities"
 import { getProfessions } from "../../../store/professions"
-import usersReducer, { getCurrentUser, updateUser } from "../../../store/users"
-import userService from "../../../services/user.service"
+import { getCurrentUser, updateUser } from "../../../store/users"
 import authService from "../../../services/auth.service"
 
 const EditUserPage = () => {
@@ -22,17 +20,25 @@ const EditUserPage = () => {
   const dispatch = useDispatch()
 
   const professions = useSelector(getProfessions())
-  const professionsList = professions.map((item) => ({
-    label: item.name,
-    value: item._id
-  }))
+  let professionsList = []
+
+  useEffect(() => {
+    professionsList = professions.map((item) => ({
+      label: item.name,
+      value: item._id
+    }))
+  }, [professions])
 
   const qualities = useSelector(getQualities())
   const qualitiesLoading = useSelector(getQualitiesLoading())
-  const qualitiesList = qualities.map((item) => ({
-    label: item.name,
-    value: item._id
-  }))
+  let qualitiesList = []
+
+  useEffect(() => {
+    qualitiesList = qualities.map((item) => ({
+      label: item.name,
+      value: item._id
+    }))
+  }, [qualitiesLoading])
 
   const transformData = (data) => {
     const qualSet = data.map((id) =>
