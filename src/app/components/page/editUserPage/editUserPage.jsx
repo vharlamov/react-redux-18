@@ -20,25 +20,17 @@ const EditUserPage = () => {
   const dispatch = useDispatch()
 
   const professions = useSelector(getProfessions())
-  let professionsList = []
-
-  useEffect(() => {
-    professionsList = professions.map((item) => ({
-      label: item.name,
-      value: item._id
-    }))
-  }, [professions])
+  const professionsList = professions.map((item) => ({
+    label: item.name,
+    value: item._id
+  }))
 
   const qualities = useSelector(getQualities())
   const qualitiesLoading = useSelector(getQualitiesLoading())
-  let qualitiesList = []
-
-  useEffect(() => {
-    qualitiesList = qualities.map((item) => ({
-      label: item.name,
-      value: item._id
-    }))
-  }, [qualitiesLoading])
+  const qualitiesList = qualities.map((item) => ({
+    label: item.name,
+    value: item._id
+  }))
 
   const transformData = (data) => {
     const qualSet = data.map((id) =>

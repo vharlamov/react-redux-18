@@ -8,7 +8,7 @@ const Comment = ({
   content,
   created_at: created,
   _id: id,
-  userId,
+  outputId: userId,
   onRemove
 }) => {
   const currentUserId = useSelector(getAuthUser())
@@ -55,7 +55,7 @@ Comment.propTypes = {
   content: PropTypes.string,
   edited_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   created_at: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  userId: PropTypes.string,
+  outputId: PropTypes.string,
   onRemove: PropTypes.func,
   _id: PropTypes.string
 }

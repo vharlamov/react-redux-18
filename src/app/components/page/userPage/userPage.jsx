@@ -1,14 +1,16 @@
-import React from "react"
+import React, { useState } from "react"
 import PropTypes from "prop-types"
 import UserCard from "../../ui/userCard"
 import QualitiesCard from "../../ui/qualitiesCard"
 import MeetingsCard from "../../ui/meetingsCard"
 import Comments from "../../ui/comments"
 import { useSelector } from "react-redux"
-import { getUserById } from "../../../store/users"
+import { getAuthUser, getUserById, getUsers } from "../../../store/users"
+import SelectField from "../../common/form/selectField"
 
 const UserPage = ({ userId }) => {
   const user = useSelector(getUserById(userId))
+  const currentUserId = useSelector(getAuthUser())
 
   if (user) {
     return (
@@ -19,9 +21,11 @@ const UserPage = ({ userId }) => {
             <QualitiesCard data={user.qualities} />
             <MeetingsCard value={user.completedMeetings} />
           </div>
-          <div className="col-md-8">
-            <Comments />
-          </div>
+          {userId === currentUserId && (
+            <div className="col-md-8">
+              <Comments />
+            </div>
+          )}
         </div>
       </div>
     )

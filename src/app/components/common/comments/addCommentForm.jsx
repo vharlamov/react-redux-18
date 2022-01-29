@@ -3,16 +3,17 @@ import TextAreaField from "../form/textAreaField"
 import { validator } from "../../../utils/validator"
 import PropTypes from "prop-types"
 
-const AddCommentForm = ({ onSubmit }) => {
+const AddCommentForm = ({ onSubmit, isSelected }) => {
   const [data, setData] = useState({})
   const [errors, setErrors] = useState({})
+
   const handleChange = (target) => {
     setData((prevState) => ({
       ...prevState,
       [target.name]: target.value
     }))
   }
-  const validatorConfog = {
+  const validatorConfig = {
     content: {
       isRequired: {
         message: "Сообщение не может быть пустым"
@@ -21,7 +22,7 @@ const AddCommentForm = ({ onSubmit }) => {
   }
 
   const validate = () => {
-    const errors = validator(data, validatorConfog)
+    const errors = validator(data, validatorConfig)
 
     setErrors(errors)
     return Object.keys(errors).length === 0
@@ -52,14 +53,20 @@ const AddCommentForm = ({ onSubmit }) => {
           error={errors.content}
         />
         <div className="d-flex justify-content-end">
-          <button className="btn btn-primary">Опубликовать</button>
+          <button
+            className="btn btn-primary"
+            disabled={!isSelected || !data.content}
+          >
+            Опубликовать
+          </button>
         </div>
       </form>
     </div>
   )
 }
 AddCommentForm.propTypes = {
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  isSelected: PropTypes.string
 }
 
 export default AddCommentForm

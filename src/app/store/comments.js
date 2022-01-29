@@ -5,7 +5,10 @@ import commentService from "../services/comment.service"
 const commentsSlice = createSlice({
   name: "comments",
   initialState: {
-    entities: null,
+    entities: {
+      input: [],
+      output: []
+    },
     isLoading: true,
     error: null
   },
@@ -13,8 +16,12 @@ const commentsSlice = createSlice({
     commentsRequested(state) {
       state.isLoading = true
     },
-    commentsRecieved(state, action) {
-      state.entities = action.payload
+    commentsOutputRecieved(state, action) {
+      state.entities.output = action.payload
+      state.isLoading = false
+    },
+    commentsInputRecieved(state, action) {
+      state.entities.input = action.payload
       state.isLoading = false
     },
     commentsRequestFailed(state, action) {
@@ -22,14 +29,15 @@ const commentsSlice = createSlice({
       state.isLoading = false
     },
     commentCreated(state, action) {
-      state.entities.push(action.payload)
+      state.entities.output.push(action.payload)
     },
     commentCreateFailed(state, action) {
       state.entities.error = action.payload
     },
     commentRemoved(state, action) {
-      state.entities = state.entities.filter((c) => c._id !== action.payload)
-      console.log("in reducer", state.entities)
+      state.entities.output = state.entities.output.filter(
+        (c) => c._id !== action.payload
+      )
     },
     commentRemoveFailed(state, action) {
       state.entities.error = action.payload
@@ -39,7 +47,8 @@ const commentsSlice = createSlice({
 
 const { actions, reducer: commentsReducer } = commentsSlice
 const {
-  commentsRecieved,
+  commentsInputRecieved,
+  commentsOutputRecieved,
   commentsRequestFailed,
   commentsRequested,
   commentCreated,
@@ -51,17 +60,27 @@ const {
 const commentCreateRequested = createAction("comments/commentCreateRequest")
 const commentRemoveRequested = createAction("comments/commentRemoveRequest")
 
-export const loadCommentsList = (pageId) => async (dispatch) => {
+export const loadOutputCommentsList = (id) => async (dispatch) => {
   dispatch(commentsRequested())
   try {
-    const { content } = await commentService.get(pageId)
-    dispatch(commentsRecieved(content))
+    const { content } = await commentService.getOutput(id)
+    dispatch(commentsOutputRecieved(content))
   } catch (error) {
     dispatch(commentsRequestFailed(error.message))
   }
 }
 
-export const createComment = (payload) => async (dispatch, getState) => {
+export const loadInputCommentsList = (id) => async (dispatch) => {
+  dispatch(commentsRequested())
+  try {
+    const { content } = await commentService.getInput(id)
+    dispatch(commentsInputRecieved(content))
+  } catch (error) {
+    dispatch(commentsRequestFailed(error.message))
+  }
+}
+
+export const createComment = (payload) => async (dispatch) => {
   const comment = {
     ...payload,
     _id: nanoid(),
@@ -87,8 +106,11 @@ export const removeComment = (id) => async (dispatch) => {
   }
 }
 
-export const getComments = () => (state) => {
-  return state.comments.entities
+export const getOutputComments = () => (state) => {
+  return state.comments.entities.output
+}
+export const getInputComments = () => (state) => {
+  return state.comments.entities.input
 }
 export const getCommentsLoading = () => (state) => state.comments.isLoading
 export const getCommentById = (id) => (state) => {
